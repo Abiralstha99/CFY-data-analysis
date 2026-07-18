@@ -70,3 +70,26 @@ def test_has_issues_false_when_data_is_clean():
     _, report = clean_dataframe(df, schema)
 
     assert report.has_issues() is False
+
+
+def test_clean_dataframe_handles_integer_typed_demographic_column():
+    # read_csv infers numeric-looking demographics (e.g. grade) as int64
+    schema = make_test_schema()
+    df = pd.DataFrame({"grade": [9, 13], "q_vaping_30day": [1, 2]})
+
+    cleaned, report = clean_dataframe(df, schema)
+
+    assert cleaned["grade"].tolist() == ["9", "Unknown"]
+    assert report.normalized_columns["grade"] == 1
+
+
+def test_clean_dataframe_handles_float_typed_demographic_with_missing_value():
+    # a single blank cell makes read_csv parse the whole column as float64,
+    # so valid grades arrive as 9.0 rather than "9"
+    schema = make_test_schema()
+    df = pd.DataFrame({"grade": [9.0, None], "q_vaping_30day": [1, 2]})
+
+    cleaned, report = clean_dataframe(df, schema)
+
+    assert cleaned["grade"].tolist() == ["9", "Unknown"]
+    assert report.normalized_columns["grade"] == 1

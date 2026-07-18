@@ -17,6 +17,21 @@ class DataQualityReport:
         return bool(self.dropped_columns) or bool(self.normalized_columns)
 
 
+def _stringify_demographic_value(value: object) -> str:
+    """Render a raw demographic cell as a string comparable to schema valid_values.
+
+    read_csv infers numeric-looking demographics (e.g. grade) as int64 — or
+    float64 when the column has blanks — so "9" arrives as 9 or 9.0. Integral
+    floats are formatted without the trailing ".0"; missing values become ""
+    so downstream validation maps them to "Unknown".
+    """
+    if pd.isna(value):
+        return ""
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value)
+
+
 def clean_dataframe(df: pd.DataFrame, schema: SurveySchema) -> tuple[pd.DataFrame, DataQualityReport]:
     dropped_columns: list[str] = []
     normalized_columns: dict[str, int] = {}
@@ -26,6 +41,7 @@ def clean_dataframe(df: pd.DataFrame, schema: SurveySchema) -> tuple[pd.DataFram
         if demographic.name not in cleaned.columns:
             dropped_columns.append(demographic.name)
             continue
+        cleaned[demographic.name] = cleaned[demographic.name].map(_stringify_demographic_value)
         invalid_mask = ~cleaned[demographic.name].isin(demographic.valid_values)
         invalid_count = int(invalid_mask.sum())
         if invalid_count:
