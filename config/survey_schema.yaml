@@ -1,0 +1,37 @@
+demographics:
+  - name: grade
+    valid_values: ["6", "7", "8", "9", "10", "11", "12"]
+  - name: gender
+    valid_values: ["Male", "Female", "Non-binary", "Prefer not to say"]
+  - name: race_ethnicity
+    valid_values:
+      - "White"
+      - "Black or African American"
+      - "Hispanic or Latino"
+      - "Asian"
+      - "American Indian or Alaska Native"
+      - "Native Hawaiian or Pacific Islander"
+      - "Two or more races"
+      - "Prefer not to say"
+
+questions:
+  - name: q_vaping_30day
+    label: "Vaping frequency (past 30 days)"
+    category: substance_use
+    valid_range: [1, 5]
+  - name: q_alcohol_30day
+    label: "Alcohol use frequency (past 30 days)"
+    category: substance_use
+    valid_range: [1, 5]
+  - name: q_mh_sad_hopeless
+    label: "Persistent sadness/hopelessness"
+    category: mental_health
+    valid_range: [1, 5]
+  - name: q_mh_anxiety
+    label: "Anxiety symptoms"
+    category: mental_health
+    valid_range: [1, 5]
+  - name: q_connectedness_school
+    label: "School connectedness"
+    category: protective_factors
+    valid_range: [1, 5]
