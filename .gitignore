@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Test & tool caches
+.pytest_cache/
+
+# Local survey data — only .gitkeep is tracked; the SQLite DB and any
+# real survey CSVs must never be committed
+data/*
+!data/.gitkeep
+
+# Streamlit local config
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
