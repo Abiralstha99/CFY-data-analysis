@@ -1,0 +1,238 @@
+- generic [ref=f2e2]:
+  - generic [ref=f2e8]:
+    - heading "View options" [level=2] [ref=f2e12]
+    - generic [ref=f2e14]:
+      - paragraph [ref=f2e18]: Break down by
+      - group [ref=f2e20]:
+        - combobox "Break down by" [ref=f2e21]: County-wide (All)
+        - button "Open" [ref=f2e22] [cursor=pointer]
+    - paragraph [ref=f2e147]: 900 responses stored across 3 year(s).
+  - generic [ref=f2e28]:
+    - banner [ref=f2e29]:
+      - generic [ref=f2e32]:
+        - button "Deploy" [ref=f2e34] [cursor=pointer]
+        - button "Main menu" [ref=f2e38] [cursor=pointer]
+    - generic [ref=f2e44]:
+      - heading "Adams County Youth Survey Dashboard" [level=1] [ref=f2e49]:
+        - text: Adams County Youth Survey Dashboard
+        - generic [ref=f2e50]:
+          - link "Link to heading":
+            - /url: "#adams-county-youth-survey-dashboard"
+      - generic [ref=f2e149]:
+        - generic [ref=f2e154]:
+          - paragraph [ref=f2e157]: Total responses
+          - paragraph [ref=f2e160]: "900"
+        - generic [ref=f2e165]:
+          - paragraph [ref=f2e168]: Years stored
+          - paragraph [ref=f2e171]: 2023–2025
+        - generic [ref=f2e176]:
+          - paragraph [ref=f2e179]: 2025 responses
+          - paragraph [ref=f2e182]: "300"
+        - generic [ref=f2e187]:
+          - paragraph [ref=f2e190]: Significant YoY changes
+          - paragraph [ref=f2e193]: "4"
+        - generic [ref=f2e198]:
+          - paragraph [ref=f2e201]: Sustained trends
+          - paragraph [ref=f2e204]: "2"
+      - generic [ref=f2e59]:
+        - tablist [ref=f2e60]:
+          - tab [ref=f2e61] [cursor=pointer]:
+            - paragraph [ref=f2e63]: 📤 Upload
+          - tab [active] [selected] [ref=f2e65] [cursor=pointer]:
+            - paragraph [ref=f2e67]: 📊 Year-over-Year
+          - tab [ref=f2e68] [cursor=pointer]:
+            - paragraph [ref=f2e70]: 📈 Multi-Year Trends
+        - tabpanel "📊 Year-over-Year" [ref=f2e492]:
+          - generic [ref=f2e493]:
+            - generic [ref=f2e495]:
+              - generic [ref=f2e499]:
+                - paragraph [ref=f2e503]: Current year
+                - group [ref=f2e505]:
+                  - combobox "Current year" [ref=f2e506]: "2025"
+                  - button "Open" [ref=f2e507] [cursor=pointer]
+              - generic [ref=f2e514]:
+                - paragraph [ref=f2e518]: Compare against
+                - group [ref=f2e520]:
+                  - combobox "Compare against" [ref=f2e521]: "2024"
+                  - button "Open" [ref=f2e522] [cursor=pointer]
+            - paragraph [ref=f2e530]: Red bars mark a statistically significant change (Welch's t-test, p < 0.05). Hover a bar for its p-value.
+            - generic [ref=f2e536]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic: All
+                    - generic:
+                      - generic: "0"
+                      - generic: "1"
+                      - generic: "2"
+                      - generic: "3"
+                      - generic: "4"
+                      - generic: "5"
+              - img:
+                - generic:
+                  - generic [ref=f2e553]:
+                    - generic [ref=f2e554]: Previous Year
+                    - generic [ref=f2e561]: Current Year
+                  - generic: Vaping frequency (past 30 days)
+                  - generic: Group
+                  - generic: Mean Score
+              - toolbar [ref=f2e568]:
+                - button "Download plot as a PNG" [ref=f2e570] [cursor=pointer]
+                - generic [ref=f2e573]:
+                  - button "Zoom" [ref=f2e574] [cursor=pointer]
+                  - button "Pan" [ref=f2e577] [cursor=pointer]
+                - generic [ref=f2e580]:
+                  - button "Zoom in" [ref=f2e581] [cursor=pointer]
+                  - button "Zoom out" [ref=f2e584] [cursor=pointer]
+                  - button "Autoscale" [ref=f2e587] [cursor=pointer]
+                  - button "Reset axes" [ref=f2e590] [cursor=pointer]
+                - button "Fullscreen" [ref=f2e594] [cursor=pointer]
+            - generic [ref=f2e601]:
+              - button "Show/hide columns" [ref=f2e605] [cursor=pointer]
+              - button "Download as CSV" [ref=f2e611] [cursor=pointer]
+              - button "Search" [ref=f2e617] [cursor=pointer]
+              - button "Fullscreen" [ref=f2e623] [cursor=pointer]
+            - generic [ref=f2e640]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic: All
+                    - generic:
+                      - generic: "0"
+                      - generic: "1"
+                      - generic: "2"
+                      - generic: "3"
+                      - generic: "4"
+                      - generic: "5"
+              - img:
+                - generic:
+                  - generic [ref=f2e657]:
+                    - generic [ref=f2e658]: Previous Year
+                    - generic [ref=f2e665]: Current Year
+                  - generic: Alcohol use frequency (past 30 days)
+                  - generic: Group
+                  - generic: Mean Score
+              - toolbar [ref=f2e672]:
+                - button "Download plot as a PNG" [ref=f2e674] [cursor=pointer]
+                - generic [ref=f2e677]:
+                  - button "Zoom" [ref=f2e678] [cursor=pointer]
+                  - button "Pan" [ref=f2e681] [cursor=pointer]
+                - generic [ref=f2e684]:
+                  - button "Zoom in" [ref=f2e685] [cursor=pointer]
+                  - button "Zoom out" [ref=f2e688] [cursor=pointer]
+                  - button "Autoscale" [ref=f2e691] [cursor=pointer]
+                  - button "Reset axes" [ref=f2e694] [cursor=pointer]
+                - button "Fullscreen" [ref=f2e698] [cursor=pointer]
+            - generic [ref=f2e705]:
+              - button "Show/hide columns" [ref=f2e709] [cursor=pointer]
+              - button "Download as CSV" [ref=f2e715] [cursor=pointer]
+              - button "Search" [ref=f2e721] [cursor=pointer]
+              - button "Fullscreen" [ref=f2e727] [cursor=pointer]
+            - generic [ref=f2e744]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic: All
+                    - generic:
+                      - generic: "0"
+                      - generic: "1"
+                      - generic: "2"
+                      - generic: "3"
+                      - generic: "4"
+                      - generic: "5"
+              - img:
+                - generic:
+                  - generic [ref=f2e761]:
+                    - generic [ref=f2e762]: Previous Year
+                    - generic [ref=f2e769]: Current Year
+                  - generic: Persistent sadness/hopelessness
+                  - generic: Group
+                  - generic: Mean Score
+              - toolbar [ref=f2e776]:
+                - button "Download plot as a PNG" [ref=f2e778] [cursor=pointer]
+                - generic [ref=f2e781]:
+                  - button "Zoom" [ref=f2e782] [cursor=pointer]
+                  - button "Pan" [ref=f2e785] [cursor=pointer]
+                - generic [ref=f2e788]:
+                  - button "Zoom in" [ref=f2e789] [cursor=pointer]
+                  - button "Zoom out" [ref=f2e792] [cursor=pointer]
+                  - button "Autoscale" [ref=f2e795] [cursor=pointer]
+                  - button "Reset axes" [ref=f2e798] [cursor=pointer]
+                - button "Fullscreen" [ref=f2e802] [cursor=pointer]
+            - generic [ref=f2e809]:
+              - button "Show/hide columns" [ref=f2e813] [cursor=pointer]
+              - button "Download as CSV" [ref=f2e819] [cursor=pointer]
+              - button "Search" [ref=f2e825] [cursor=pointer]
+              - button "Fullscreen" [ref=f2e831] [cursor=pointer]
+            - generic [ref=f2e848]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic: All
+                    - generic:
+                      - generic: "0"
+                      - generic: "1"
+                      - generic: "2"
+                      - generic: "3"
+                      - generic: "4"
+                      - generic: "5"
+              - img:
+                - generic:
+                  - generic [ref=f2e865]:
+                    - generic [ref=f2e866]: Previous Year
+                    - generic [ref=f2e873]: Current Year
+                  - generic: Anxiety symptoms
+                  - generic: Group
+                  - generic: Mean Score
+              - toolbar [ref=f2e880]:
+                - button "Download plot as a PNG" [ref=f2e882] [cursor=pointer]
+                - generic [ref=f2e885]:
+                  - button "Zoom" [ref=f2e886] [cursor=pointer]
+                  - button "Pan" [ref=f2e889] [cursor=pointer]
+                - generic [ref=f2e892]:
+                  - button "Zoom in" [ref=f2e893] [cursor=pointer]
+                  - button "Zoom out" [ref=f2e896] [cursor=pointer]
+                  - button "Autoscale" [ref=f2e899] [cursor=pointer]
+                  - button "Reset axes" [ref=f2e902] [cursor=pointer]
+                - button "Fullscreen" [ref=f2e906] [cursor=pointer]
+            - generic [ref=f2e913]:
+              - button "Show/hide columns" [ref=f2e917] [cursor=pointer]
+              - button "Download as CSV" [ref=f2e923] [cursor=pointer]
+              - button "Search" [ref=f2e929] [cursor=pointer]
+              - button "Fullscreen" [ref=f2e935] [cursor=pointer]
+            - generic [ref=f2e952]:
+              - img:
+                - generic:
+                  - generic:
+                    - generic: All
+                    - generic:
+                      - generic: "0"
+                      - generic: "1"
+                      - generic: "2"
+                      - generic: "3"
+                      - generic: "4"
+                      - generic: "5"
+              - img:
+                - generic:
+                  - generic [ref=f2e969]:
+                    - generic [ref=f2e970]: Previous Year
+                    - generic [ref=f2e977]: Current Year
+                  - generic: School connectedness
+                  - generic: Group
+                  - generic: Mean Score
+              - toolbar [ref=f2e984]:
+                - button "Download plot as a PNG" [ref=f2e986] [cursor=pointer]
+                - generic [ref=f2e989]:
+                  - button "Zoom" [ref=f2e990] [cursor=pointer]
+                  - button "Pan" [ref=f2e993] [cursor=pointer]
+                - generic [ref=f2e996]:
+                  - button "Zoom in" [ref=f2e997] [cursor=pointer]
+                  - button "Zoom out" [ref=f2e1000] [cursor=pointer]
+                  - button "Autoscale" [ref=f2e1003] [cursor=pointer]
+                  - button "Reset axes" [ref=f2e1006] [cursor=pointer]
+                - button "Fullscreen" [ref=f2e1010] [cursor=pointer]
+            - generic [ref=f2e1017]:
+              - button "Show/hide columns" [ref=f2e1021] [cursor=pointer]
+              - button "Download as CSV" [ref=f2e1027] [cursor=pointer]
+              - button "Search" [ref=f2e1033] [cursor=pointer]
+              - button "Fullscreen" [ref=f2e1039] [cursor=pointer]
