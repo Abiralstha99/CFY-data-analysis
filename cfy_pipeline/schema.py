@@ -1,3 +1,12 @@
+"""Survey schema definition and YAML loader.
+
+Design decision: frozen dataclasses rather than dicts so that schema objects are
+hashable and immutable once loaded — prevents accidental mutation during a run.
+
+To add a new question or demographic field, edit config/survey_schema.yaml.
+No code changes required unless the field type is fundamentally new.
+"""
+
 from __future__ import annotations
 
 import dataclasses
@@ -9,15 +18,17 @@ import yaml
 @dataclasses.dataclass(frozen=True)
 class DemographicField:
     name: str
+    # All valid values stored as strings — even numeric grades like "9" —
+    # because CSV parsing may yield mixed types (see cleaning._stringify_demographic_value).
     valid_values: tuple[str, ...]
 
 
 @dataclasses.dataclass(frozen=True)
 class QuestionField:
     name: str
-    label: str
-    category: str
-    valid_range: tuple[int, int]
+    label: str        # Human-readable label for chart titles
+    category: str     # Grouping key (e.g. "substance_use", "mental_health")
+    valid_range: tuple[int, int]  # Inclusive Likert scale bounds
 
 
 @dataclasses.dataclass(frozen=True)
@@ -32,6 +43,7 @@ class SurveySchema:
         return [q.name for q in self.questions]
 
     def expected_columns(self) -> list[str]:
+        """All columns a fully-conforming CSV should contain."""
         return self.demographic_names() + self.question_names()
 
     def question_by_name(self, name: str) -> QuestionField:
@@ -48,6 +60,18 @@ class SurveySchema:
 
 
 def load_schema(path: str | Path) -> SurveySchema:
+    """Parse a survey schema YAML file into a SurveySchema instance.
+
+    Expected YAML structure:
+        demographics:
+          - name: grade
+            valid_values: ["6", "7", ...]
+        questions:
+          - name: q_vaping_30day
+            label: "Vaping frequency (past 30 days)"
+            category: substance_use
+            valid_range: [1, 5]
+    """
     with open(path, "r") as f:
         raw = yaml.safe_load(f)
 
