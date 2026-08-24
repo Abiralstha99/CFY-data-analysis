@@ -1,9 +1,8 @@
-"""Streamlit dashboard for the Adams County Youth Survey pipeline.
+"""Streamlit dashboard — run with: streamlit run cfy_pipeline/dashboard.py
 
-Layout: sidebar holds the demographic breakdown control; the main area shows a
-summary metrics row above three tabs (Upload / Year-over-Year / Multi-Year
-Trends). All analysis logic lives in the cfy_pipeline modules — this file only
-wires them to the UI.
+Thin UI layer: all analysis logic lives in the cfy_pipeline modules.
+group_by=None means county-wide (no demographic split).
+st.rerun() after upload forces a refresh since Streamlit doesn't detect DB changes.
 """
 
 from __future__ import annotations
@@ -13,14 +12,14 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from cfy_pipeline import DataQualityReport, SurveySchema, load_schema, process_uploaded_file
 from cfy_pipeline.charts import build_comparison_figure, build_trend_figure
-from cfy_pipeline.cleaning import DataQualityReport
 from cfy_pipeline.comparison import SIGNIFICANCE_THRESHOLD, ComparisonResult, compare_years
-from cfy_pipeline.pipeline import process_uploaded_file
-from cfy_pipeline.schema import SurveySchema, load_schema
 from cfy_pipeline.storage import load_all_years, load_year
 from cfy_pipeline.trends import MIN_YEARS_FOR_TREND, TrendResult, detect_multi_year_trends
 
+# Paths are relative to this file's parent (cfy_pipeline/) going up one level
+# to the project root. Works in both local dev and Streamlit Cloud deployments.
 SCHEMA_PATH = Path(__file__).resolve().parent.parent / "config" / "survey_schema.yaml"
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "survey.db"
 
@@ -33,6 +32,7 @@ def format_p_value(p_value: float) -> str:
 
 
 def render_metrics_row(df_all: pd.DataFrame, schema: SurveySchema) -> None:
+    """Top-level summary metrics shown above the tabs when data exists."""
     years = sorted(df_all["survey_year"].unique().tolist())
     latest_year = years[-1]
 
@@ -52,6 +52,7 @@ def render_metrics_row(df_all: pd.DataFrame, schema: SurveySchema) -> None:
 
 
 def render_quality_report(year: int, report: DataQualityReport) -> None:
+    """Display the data quality report after a successful upload."""
     st.success(f"Processed {report.row_count} responses for {year}.")
     with st.expander("Data quality details", expanded=report.has_issues()):
         if report.dropped_columns:
@@ -79,6 +80,7 @@ def render_quality_report(year: int, report: DataQualityReport) -> None:
 
 
 def render_upload_tab(schema: SurveySchema, df_all: pd.DataFrame) -> None:
+    """Upload tab: file picker, year selector, confirmation for overwrites."""
     st.subheader("Upload a survey year")
     year_counts = df_all["survey_year"].value_counts().to_dict() if not df_all.empty else {}
 
@@ -89,6 +91,7 @@ def render_upload_tab(schema: SurveySchema, df_all: pd.DataFrame) -> None:
         existing_rows = year_counts.get(year, 0)
         confirmed = True
         if existing_rows:
+            # Guard against accidental overwrites — staff must explicitly confirm
             st.warning(
                 f"{existing_rows} responses are already stored for {year}. "
                 "Processing this file will replace them."
@@ -98,7 +101,7 @@ def render_upload_tab(schema: SurveySchema, df_all: pd.DataFrame) -> None:
         if st.button("Process Upload", type="primary", disabled=not confirmed):
             report = process_uploaded_file(uploaded_file, year, schema, DB_PATH)
             st.session_state[LAST_UPLOAD_STATE_KEY] = {"year": year, "report": report}
-            st.rerun()  # refresh metrics/charts computed from the pre-upload snapshot
+            st.rerun()
 
     last_upload = st.session_state.get(LAST_UPLOAD_STATE_KEY)
     if last_upload is not None:
@@ -106,6 +109,7 @@ def render_upload_tab(schema: SurveySchema, df_all: pd.DataFrame) -> None:
 
 
 def comparison_results_table(results: list[ComparisonResult]) -> pd.DataFrame:
+    """Format comparison results as a DataFrame for display below charts."""
     return pd.DataFrame(
         {
             "Group": [r.group for r in results],
@@ -119,6 +123,7 @@ def comparison_results_table(results: list[ComparisonResult]) -> pd.DataFrame:
 
 
 def render_comparison_tab(df_all: pd.DataFrame, schema: SurveySchema, group_by: str | None) -> None:
+    """Year-over-year tab: select two years, see per-question bar charts."""
     years = sorted(df_all["survey_year"].unique().tolist())
     if len(years) < 2:
         st.info("Year-over-year comparison needs at least 2 years of data.")
@@ -149,6 +154,7 @@ def render_comparison_tab(df_all: pd.DataFrame, schema: SurveySchema, group_by: 
 
 
 def trend_results_table(trends: list[TrendResult]) -> pd.DataFrame:
+    """Format trend results as a DataFrame for display below charts."""
     return pd.DataFrame(
         {
             "Group": [t.group for t in trends],
@@ -161,6 +167,7 @@ def trend_results_table(trends: list[TrendResult]) -> pd.DataFrame:
 
 
 def render_trends_tab(df_all: pd.DataFrame, schema: SurveySchema, group_by: str | None) -> None:
+    """Multi-year trends tab: line charts per question with regression results."""
     year_count = df_all["survey_year"].nunique()
     if year_count < MIN_YEARS_FOR_TREND:
         st.info(
@@ -190,6 +197,7 @@ def main() -> None:
     schema = load_schema(SCHEMA_PATH)
     df_all = load_all_years(DB_PATH)
 
+    # Sidebar: demographic breakdown control applies to comparison + trends tabs
     with st.sidebar:
         st.header("View options")
         group_by_choice = st.selectbox("Break down by", [COUNTY_WIDE_OPTION] + schema.demographic_names())
