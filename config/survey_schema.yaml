@@ -1,3 +1,20 @@
+# Adams County Youth Survey Schema
+#
+# This file defines the expected structure of survey CSV files.
+# The pipeline uses this to validate uploads, clean data, and drive analysis.
+#
+# To onboard a new survey: copy this file, adjust the fields below, and point
+# the dashboard at the new config. No pipeline code changes needed.
+#
+# Demographics: categorical fields used for subgroup breakdowns.
+#   valid_values must be strings (even numeric grades like "9").
+#   Values not in this list are replaced with "Unknown" during cleaning.
+#
+# Questions: numeric (Likert scale) fields analyzed for trends/comparisons.
+#   valid_range: [min, max] inclusive. Out-of-range values are clipped.
+#   category: used for grouping in future reporting (not yet displayed in UI).
+#   label: human-readable name shown in chart titles.
+
 demographics:
   - name: grade
     valid_values: ["6", "7", "8", "9", "10", "11", "12"]
