@@ -1,6 +1,6 @@
 import pandas as pd
 
-from cfy_pipeline.pipeline import process_uploaded_file
+from cfy_pipeline import process_uploaded_file
 from cfy_pipeline.schema import QuestionField, SurveySchema
 from cfy_pipeline.storage import load_year
 
