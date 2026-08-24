@@ -6,14 +6,19 @@ __pycache__/
 
 # Test & tool caches
 .pytest_cache/
+.playwright-mcp/
 
-# Local survey data — only .gitkeep is tracked; the SQLite DB and any
-# real survey CSVs must never be committed
+# Local survey data — only .gitkeep and sample files are tracked;
+# the SQLite DB and real survey CSVs must never be committed
 data/*
 !data/.gitkeep
+!data/sample_*.csv
 
 # Streamlit local config
 .streamlit/secrets.toml
+
+# Screenshots from testing sessions
+*.png
 
 # OS
 .DS_Store
