@@ -36,6 +36,7 @@ def test_clean_dataframe_normalizes_out_of_range_likert_values():
 
     assert cleaned["q_vaping_30day"].tolist() == [1, 5, 1]
     assert report.normalized_columns["q_vaping_30day"] == 2
+    assert report.normalized_examples["q_vaping_30day"] == [(7, 5), (-2, 1)]
 
 
 def test_clean_dataframe_normalizes_invalid_categorical_value():
@@ -49,6 +50,7 @@ def test_clean_dataframe_normalizes_invalid_categorical_value():
 
     assert cleaned["grade"].tolist() == ["9", "Unknown"]
     assert report.normalized_columns["grade"] == 1
+    assert report.normalized_examples["grade"] == [("13", "Unknown")]
 
 
 def test_clean_dataframe_reports_row_count():
@@ -93,3 +95,15 @@ def test_clean_dataframe_handles_float_typed_demographic_with_missing_value():
 
     assert cleaned["grade"].tolist() == ["9", "Unknown"]
     assert report.normalized_columns["grade"] == 1
+
+
+def test_clean_dataframe_accepts_numeric_strings_with_missing_answers():
+    schema = make_test_schema()
+    df = pd.DataFrame({"grade": ["9", "10", "11"], "q_vaping_30day": ["2", None, "7"]})
+
+    cleaned, report = clean_dataframe(df, schema)
+
+    assert cleaned["q_vaping_30day"].tolist()[:1] == [2]
+    assert pd.isna(cleaned["q_vaping_30day"].iloc[1])
+    assert cleaned["q_vaping_30day"].iloc[2] == 5
+    assert report.normalized_columns["q_vaping_30day"] == 1

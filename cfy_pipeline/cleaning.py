@@ -26,6 +26,7 @@ class DataQualityReport:
     dropped_columns: list[str]
     normalized_columns: dict[str, int]  # column name → count of values fixed
     row_count: int
+    normalized_examples: dict[str, list[tuple[object, object]]] = dataclasses.field(default_factory=dict)
 
     def has_issues(self) -> bool:
         return bool(self.dropped_columns) or bool(self.normalized_columns)
@@ -54,6 +55,7 @@ def clean_dataframe(df: pd.DataFrame, schema: SurveySchema) -> tuple[pd.DataFram
     """
     dropped_columns: list[str] = []
     normalized_columns: dict[str, int] = {}
+    normalized_examples: dict[str, list[tuple[object, object]]] = {}
     cleaned = df.copy()
 
     # --- Demographics: validate categorical values ---
@@ -65,6 +67,9 @@ def clean_dataframe(df: pd.DataFrame, schema: SurveySchema) -> tuple[pd.DataFram
         invalid_mask = ~cleaned[demographic.name].isin(demographic.valid_values)
         invalid_count = int(invalid_mask.sum())
         if invalid_count:
+            normalized_examples[demographic.name] = [
+                (value, "Unknown") for value in cleaned.loc[invalid_mask, demographic.name].head(3).tolist()
+            ]
             # Replace with "Unknown" rather than dropping rows — preserves sample size
             cleaned.loc[invalid_mask, demographic.name] = "Unknown"
             normalized_columns[demographic.name] = invalid_count
@@ -75,9 +80,13 @@ def clean_dataframe(df: pd.DataFrame, schema: SurveySchema) -> tuple[pd.DataFram
             dropped_columns.append(question.name)
             continue
         low, high = question.valid_range
+        cleaned[question.name] = pd.to_numeric(cleaned[question.name], errors="raise")
         out_of_range_mask = (cleaned[question.name] < low) | (cleaned[question.name] > high)
         out_of_range_count = int(out_of_range_mask.sum())
         if out_of_range_count:
+            original_values = cleaned.loc[out_of_range_mask, question.name].head(3)
+            clipped_values = original_values.clip(lower=low, upper=high)
+            normalized_examples[question.name] = list(zip(original_values.tolist(), clipped_values.tolist()))
             cleaned[question.name] = cleaned[question.name].clip(lower=low, upper=high)
             normalized_columns[question.name] = out_of_range_count
 
@@ -89,5 +98,6 @@ def clean_dataframe(df: pd.DataFrame, schema: SurveySchema) -> tuple[pd.DataFram
         dropped_columns=dropped_columns,
         normalized_columns=normalized_columns,
         row_count=len(cleaned),
+        normalized_examples=normalized_examples,
     )
     return cleaned, report
