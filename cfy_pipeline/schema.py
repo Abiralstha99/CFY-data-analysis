@@ -29,6 +29,9 @@ class QuestionField:
     label: str        # Human-readable label for chart titles
     category: str     # Grouping key (e.g. "substance_use", "mental_health")
     valid_range: tuple[int, int]  # Inclusive Likert scale bounds
+    low_label: str | None = None
+    high_label: str | None = None
+    interpretation: str | None = None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -85,6 +88,9 @@ def load_schema(path: str | Path) -> SurveySchema:
             label=q["label"],
             category=q["category"],
             valid_range=tuple(q["valid_range"]),
+            low_label=q.get("low_label"),
+            high_label=q.get("high_label"),
+            interpretation=q.get("interpretation"),
         )
         for q in raw["questions"]
     )

@@ -27,3 +27,23 @@ def test_expected_columns_combines_demographics_and_questions():
     assert "grade" in expected
     assert "q_mh_anxiety" in expected
     assert len(expected) == len(schema.demographics) + len(schema.questions)
+
+
+def test_question_scale_wording_loads_when_configured(tmp_path):
+    config = tmp_path / "schema.yaml"
+    config.write_text(
+        "demographics: []\nquestions:\n"
+        "  - name: q_example\n"
+        "    label: Example question\n"
+        "    category: example\n"
+        "    valid_range: [1, 5]\n"
+        "    low_label: Never\n"
+        "    high_label: Always\n"
+        "    interpretation: Higher scores mean more frequent responses.\n"
+    )
+
+    question = load_schema(config).questions[0]
+
+    assert question.low_label == "Never"
+    assert question.high_label == "Always"
+    assert question.interpretation == "Higher scores mean more frequent responses."

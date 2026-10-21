@@ -14,6 +14,8 @@
 #   valid_range: [min, max] inclusive. Out-of-range values are clipped.
 #   category: used for grouping in future reporting (not yet displayed in UI).
 #   label: human-readable name shown in chart titles.
+#   low_label/high_label: endpoint wording provided for this dashboard.
+#   The exact wording for response options 2–4 has not been supplied.
 
 demographics:
   - name: grade
@@ -36,19 +38,34 @@ questions:
     label: "Vaping frequency (past 30 days)"
     category: substance_use
     valid_range: [1, 5]
+    low_label: "Never"
+    high_label: "Always"
+    interpretation: "A higher score means vaping was reported more often in the past 30 days. A flagged change only marks statistical evidence of a difference."
   - name: q_alcohol_30day
     label: "Alcohol use frequency (past 30 days)"
     category: substance_use
     valid_range: [1, 5]
+    low_label: "Never"
+    high_label: "Always"
+    interpretation: "A higher score means alcohol use was reported more often in the past 30 days. A flagged change only marks statistical evidence of a difference."
   - name: q_mh_sad_hopeless
     label: "Persistent sadness/hopelessness"
     category: mental_health
     valid_range: [1, 5]
+    low_label: "Never"
+    high_label: "Always"
+    interpretation: "A higher score means sadness or hopelessness was reported more often. A flagged change only marks statistical evidence of a difference."
   - name: q_mh_anxiety
     label: "Anxiety symptoms"
     category: mental_health
     valid_range: [1, 5]
+    low_label: "Never"
+    high_label: "Always"
+    interpretation: "A higher score means anxiety symptoms were reported more often. A flagged change only marks statistical evidence of a difference."
   - name: q_connectedness_school
     label: "School connectedness"
     category: protective_factors
     valid_range: [1, 5]
+    low_label: "Never"
+    high_label: "Always"
+    interpretation: "A higher score means feeling connected at school was reported more often. A flagged change only marks statistical evidence of a difference."
