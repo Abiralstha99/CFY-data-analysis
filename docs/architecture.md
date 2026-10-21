@@ -35,7 +35,7 @@ dashboard.py — Streamlit UI (thin wiring layer)
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `schema.py`     | Loads `config/survey_schema.yaml`; defines what columns and values are valid. Single source of truth for CSV structure.                                                                  |
 | `cleaning.py`   | Validates and normalizes raw CSV data against the schema. Business rules: clip out-of-range Likert values, replace invalid demographics with "Unknown", drop missing columns gracefully. |
-| `storage.py`    | SQLite persistence layer. One DB file accumulates all years. Upsert semantics: re-uploading a year replaces previous data.                                                               |
+| `storage.py`    | SQLite persistence layer. One DB stores cleaned responses and original CSVs for new uploads. Re-uploading a year replaces its data and file together. Older saved years remain available even when their original CSV was not stored. |
 | `comparison.py` | Year-over-year statistical tests. Uses Welch's t-test (unequal variance, unpaired — responses are anonymous across years).                                                               |
 | `trends.py`     | Multi-year trend detection. Fits linear regression on yearly question means. Flags sustained directional change across 3+ years.                                                         |
 | `charts.py`     | Pure Plotly figure builders. No I/O, no state. Takes analysis results → returns figures.                                                                                                 |

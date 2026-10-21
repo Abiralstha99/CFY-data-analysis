@@ -33,7 +33,11 @@ streamlit run cfy_pipeline/dashboard.py
 Then open the local URL shown in terminal. Upload a survey CSV to get started.
 
 > [!TIP]
-> A sample CSV is included at `data/sample_2025.csv` for testing.
+> Sample CSVs for 2025 and 2026 are included in `data/` for trying the dashboard.
+
+The dashboard opens on **Overview**. Use **Compare Years** and **Trends** to explore
+results, or **Uploaded Files** to search datasets, preview and download CSVs,
+upload a new year, or replace or delete a year after confirmation.
 
 ## How It Works
 
@@ -55,6 +59,7 @@ cfy_pipeline/
 ├── schema.py         # Survey schema loader (from YAML config)
 ├── cleaning.py       # Data validation and normalization
 ├── storage.py        # SQLite persistence layer
+├── uploaded_files.py # File library, upload dialog, and file actions
 ├── comparison.py     # Year-over-year statistical tests
 ├── trends.py         # Multi-year trend detection
 ├── charts.py         # Plotly figure builders
