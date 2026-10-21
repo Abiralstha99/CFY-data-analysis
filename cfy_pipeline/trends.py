@@ -30,6 +30,7 @@ class TrendResult:
     slope: float         # Mean score change per year (Likert units/year)
     p_value: float
     is_sustained: bool
+    yearly_counts: list[int] = dataclasses.field(default_factory=list)
 
     @property
     def direction(self) -> str:
@@ -55,18 +56,18 @@ def detect_multi_year_trends(
     for question in schema.questions:
         for group in groups:
             subset = _filter_group(df_all, group_by, group)
-            yearly = (
+            yearly_summary = (
                 subset.dropna(subset=[question.name])
                 .groupby("survey_year")[question.name]
-                .mean()
+                .agg(["mean", "count"])
                 .sort_index()
             )
 
-            if len(yearly) < MIN_YEARS_FOR_TREND:
+            if len(yearly_summary) < MIN_YEARS_FOR_TREND:
                 continue
 
-            years = yearly.index.tolist()
-            means = yearly.values.tolist()
+            years = yearly_summary.index.tolist()
+            means = yearly_summary["mean"].tolist()
             slope, _intercept, _r, p_value, _stderr = stats.linregress(years, means)
 
             results.append(
@@ -78,6 +79,7 @@ def detect_multi_year_trends(
                     slope=float(slope),
                     p_value=float(p_value),
                     is_sustained=bool(p_value < TREND_SIGNIFICANCE_THRESHOLD),
+                    yearly_counts=yearly_summary["count"].astype(int).tolist(),
                 )
             )
 

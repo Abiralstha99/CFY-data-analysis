@@ -71,3 +71,16 @@ def test_detect_multi_year_trends_by_group_splits_per_subgroup():
 
     groups = {r.group for r in results}
     assert groups == {"9", "10"}
+    assert all(r.yearly_counts == [10, 10, 10] for r in results)
+
+
+def test_trend_counts_only_valid_answers_per_year():
+    schema = make_schema()
+    df = pd.DataFrame({
+        "survey_year": [2022] * 3 + [2023] * 3 + [2024] * 3,
+        "q_vaping_30day": [1, 2, None, 2, 3, 4, 3, 4, 5],
+    })
+
+    result = detect_multi_year_trends(df, schema)[0]
+
+    assert result.yearly_counts == [2, 3, 3]
