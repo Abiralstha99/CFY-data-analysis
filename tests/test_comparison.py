@@ -53,6 +53,20 @@ def test_compare_years_by_group_splits_results_per_subgroup():
 
     groups = {r.group for r in results}
     assert groups == {"9", "10"}
+    assert all(r.previous_count == 10 and r.current_count == 10 for r in results)
+
+
+def test_compare_years_counts_only_valid_answers_for_each_question():
+    schema = make_schema()
+    df = pd.DataFrame({
+        "survey_year": [2024] * 3 + [2025] * 3,
+        "q_vaping_30day": [1, 2, None, 3, 4, 5],
+    })
+
+    result = compare_years(df, schema, 2024, 2025)[0]
+
+    assert result.previous_count == 2
+    assert result.current_count == 3
 
 
 def test_compare_years_skips_question_with_insufficient_sample_size():

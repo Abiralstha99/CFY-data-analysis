@@ -27,6 +27,8 @@ class ComparisonResult:
     current_year_mean: float
     p_value: float
     significant: bool
+    previous_count: int = 0
+    current_count: int = 0
 
 
 def compare_years(
@@ -65,6 +67,8 @@ def compare_years(
                     p_value=float(p_value),
                     # bool() ensures native Python bool, not numpy.bool_ (breaks `is True` assertions)
                     significant=bool(p_value < SIGNIFICANCE_THRESHOLD),
+                    previous_count=len(prev),
+                    current_count=len(curr),
                 )
             )
 
