@@ -11,8 +11,8 @@ __pycache__/
 # Local survey data — only .gitkeep and sample files are tracked;
 # the SQLite DB and real survey CSVs must never be committed
 data/*
-!data/.gitkeep
-!data/sample_*.csv
+data/.gitkeep
+data/sample_*.csv
 
 # Streamlit local config
 .streamlit/secrets.toml
