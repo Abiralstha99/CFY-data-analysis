@@ -2,10 +2,10 @@
 
 Stateless: each function takes analysis results → returns a Figure. No I/O.
 
-Color system (CVD-safe, WCAG ≥3:1 contrast):
-    Red  = statistically significant (action needed)
-    Blue = no significant change (baseline)
-    Gray = previous-year reference bars (context)
+Color system for the dark dashboard:
+    Coral = statistically flagged change
+    Blue  = no flagged change
+    Gray  = previous-year reference bars
 """
 
 from __future__ import annotations
@@ -15,16 +15,16 @@ import plotly.graph_objects as go
 from cfy_pipeline.comparison import ComparisonResult
 from cfy_pipeline.trends import TrendResult
 
-SIGNIFICANT_COLOR = "#d03b3b"
-BASELINE_COLOR = "#2a78d6"
-PREVIOUS_YEAR_COLOR = "#898781"
+SIGNIFICANT_COLOR = "#F28C7E"
+BASELINE_COLOR = "#78B7E8"
+PREVIOUS_YEAR_COLOR = "#8FA4B8"
 
 # All survey questions use 1–5 Likert scale; axis range gives breathing room
 _LIKERT_AXIS_RANGE = [0, 5.5]
 
 
 def build_comparison_figure(results: list[ComparisonResult], question_label: str) -> go.Figure:
-    """Grouped bar chart: previous year (gray) vs current year (red/blue by significance)."""
+    """Grouped bar chart: previous year (gray) vs current year (coral/blue)."""
     groups = [r.group for r in results]
     previous_means = [r.previous_mean for r in results]
     current_means = [r.current_year_mean for r in results]
@@ -37,21 +37,22 @@ def build_comparison_figure(results: list[ComparisonResult], question_label: str
         x=groups,
         y=previous_means,
         marker_color=PREVIOUS_YEAR_COLOR,
-        hovertemplate="%{x}<br>Previous mean: %{y:.2f}<extra></extra>",
+        customdata=[r.previous_count for r in results],
+        hovertemplate="%{x}<br>Previous average: %{y:.2f}<br>Responses: %{customdata}<extra></extra>",
     )
     fig.add_bar(
         name="Current Year",
         x=groups,
         y=current_means,
         marker_color=colors,
-        customdata=p_values,
-        hovertemplate="%{x}<br>Current mean: %{y:.2f}<br>p-value: %{customdata:.4f}<extra></extra>",
+        customdata=[[r.current_count, p] for r, p in zip(results, p_values)],
+        hovertemplate="%{x}<br>Current average: %{y:.2f}<br>Responses: %{customdata[0]}<br>p-value: %{customdata[1]:.4f}<extra></extra>",
     )
     fig.update_layout(
         barmode="group",
         title=question_label,
         xaxis_title="Group",
-        yaxis_title="Mean Score",
+        yaxis_title="Average response (1–5)",
         yaxis_range=_LIKERT_AXIS_RANGE,
     )
     return fig
@@ -67,12 +68,13 @@ def build_trend_figure(result: TrendResult, question_label: str) -> go.Figure:
         mode="lines+markers",
         line_color=line_color,
         marker_size=8,
-        hovertemplate="%{x}<br>Mean: %{y:.2f}<extra></extra>",
+        customdata=result.yearly_counts or [None] * len(result.years),
+        hovertemplate="%{x}<br>Average response: %{y:.2f}<br>Responses: %{customdata}<extra></extra>",
     )
     fig.update_layout(
         title=f"{question_label} — {result.group} ({result.direction})",
         xaxis_title="Year",
-        yaxis_title="Mean Score",
+        yaxis_title="Average response (1–5)",
         yaxis_range=_LIKERT_AXIS_RANGE,
         xaxis=dict(tickmode="array", tickvals=result.years),
     )
